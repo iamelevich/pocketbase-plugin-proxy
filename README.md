@@ -31,10 +31,9 @@ You can check examples in [examples folder](/examples)
 package main
 
 import (
-	"context"
-	proxyPlugin "github.com/iamelevich/pocketbase-plugin-proxy"
 	"log"
-
+	
+	proxyPlugin "github.com/iamelevich/pocketbase-plugin-proxy"
 	"github.com/pocketbase/pocketbase"
 )
 
@@ -43,8 +42,8 @@ func main() {
 
 	// Setup ngrok
 	proxyPlugin.MustRegister(app, &proxyPlugin.Options{
-		Enabled:    true,
-		Url:        "http://localhost:3000",
+		Enabled: true,
+		Url:     "http://localhost:3000",
 	})
 
 	if err := app.Start(); err != nil {
