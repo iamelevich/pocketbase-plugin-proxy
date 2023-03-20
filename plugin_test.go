@@ -1,9 +1,9 @@
 package pocketbase_plugin_ngrok
 
 import (
-	"github.com/pocketbase/pocketbase"
 	"testing"
 
+	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 )
 

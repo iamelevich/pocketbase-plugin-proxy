@@ -2,12 +2,13 @@ package pocketbase_plugin_ngrok
 
 import (
 	"fmt"
-	"github.com/labstack/echo/v5"
-	"github.com/labstack/echo/v5/middleware"
-	"github.com/pocketbase/pocketbase/core"
 	"log"
 	"net/url"
 	"strings"
+
+	"github.com/labstack/echo/v5"
+	"github.com/labstack/echo/v5/middleware"
+	"github.com/pocketbase/pocketbase/core"
 )
 
 // Options defines optional struct to customize the default plugin behavior.
