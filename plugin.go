@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
 	"github.com/pocketbase/pocketbase/core"
@@ -85,6 +86,16 @@ func (p *Plugin) enableProxy(e *core.ServeEvent) error {
 				},
 			}),
 		}))
+
+		date := new(strings.Builder)
+		log.New(date, "", log.LstdFlags).Print()
+
+		bold := color.New(color.Bold).Add(color.FgGreen)
+		bold.Printf(
+			"%s Proxy will forward requests to %s\n",
+			strings.TrimSpace(date.String()),
+			color.CyanString("%s", p.parsedUrl.String()),
+		)
 	}
 	return nil
 }
