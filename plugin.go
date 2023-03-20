@@ -2,11 +2,11 @@ package pocketbase_plugin_ngrok
 
 import (
 	"fmt"
-	"github.com/fatih/color"
 	"log"
 	"net/url"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
 	"github.com/pocketbase/pocketbase/core"
