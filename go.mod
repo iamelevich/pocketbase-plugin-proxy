@@ -3,7 +3,7 @@ module github.com/iamelevich/pocketbase-plugin-proxy
 go 1.18
 
 require (
-	github.com/labstack/echo/v5 v5.0.0-20220201181537-ed2888cfa198
+	github.com/labstack/echo/v5 c0bc886b78b8
 	github.com/pocketbase/pocketbase v0.13.4
 )
 
