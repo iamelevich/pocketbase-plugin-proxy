@@ -1,4 +1,4 @@
-package pocketbase_plugin_ngrok
+package pocketbase_plugin_proxy
 
 import (
 	"net/http"

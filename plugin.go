@@ -1,4 +1,4 @@
-package pocketbase_plugin_ngrok
+package pocketbase_plugin_proxy
 
 import (
 	"fmt"
@@ -84,6 +84,10 @@ If set - you should also control the middleware behavior for /_/ and /api/ route
 
 Example:
 
+	plugin := proxyPlugin.MustRegister(app, &proxyPlugin.Options{
+		Enabled: true,
+		Url:     "http://localhost:3000",
+	})
 	plugin.SetSkipper(func(c echo.Context) bool {
 		return c.Request().URL.Path == "/my-super-secret-route"
 	})
