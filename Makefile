@@ -5,7 +5,7 @@ test:
 	go test ./... -v --cover
 
 test-report:
-	go test ./... -v --cover -coverprofile=coverage.out
+	go test ./... -v --cover -covermode=atomic -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 
 run_base_example:
