@@ -10,3 +10,8 @@ test-report:
 
 run_base_example:
 	cd examples/base && go run main.go serve
+
+# Generate docs
+# Require gomarkdoc (https://github.com/princjef/gomarkdoc)
+docs:
+	gomarkdoc -o README.md -e .
