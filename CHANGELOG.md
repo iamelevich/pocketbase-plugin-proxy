@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.1](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.15.0...v0.15.1) (2023-04-01)
+
+
+### Bug Fixes
+
+* fix wrong package name ([bfc2e3b](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/bfc2e3b73a41d6dea807b3c4e43e74e74b970917))
+
 ## [0.15.0](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.14.0...v0.15.0) (2023-04-01)
 
 
