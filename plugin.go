@@ -92,7 +92,7 @@ func (p *Plugin) SetSkipper(skipper middleware.Skipper) {
 	p.skipper = skipper
 }
 
-func (p *Plugin) enableProxy(e *core.ServeEvent) error {
+func (p *Plugin) enableProxy(e *core.ServeEvent) {
 	if p.options.Enabled {
 		if p.options.ProxyLogsEnabled {
 			e.Router.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -120,7 +120,6 @@ func (p *Plugin) enableProxy(e *core.ServeEvent) error {
 			color.CyanString("%s", p.parsedUrl.String()),
 		)
 	}
-	return nil
 }
 
 // MustRegister is a helper function that registers plugin and panics if error occurred.
@@ -152,9 +151,7 @@ func Register(app core.App, options *Options) (*Plugin, error) {
 	}
 
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		if err := p.enableProxy(e); err != nil {
-			return err
-		}
+		p.enableProxy(e)
 		return nil
 	})
 
