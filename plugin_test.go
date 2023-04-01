@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tests"
@@ -114,6 +115,13 @@ func TestPlugin_Validate(t *testing.T) {
 	}
 }
 
+func TestPlugin_Register(t *testing.T) {
+	_, err := Register(nil, nil)
+	if err == nil {
+		t.Errorf("Register() should fail when app is nil")
+	}
+}
+
 func TestPlugin_MustRegister(t *testing.T) {
 	// setup the test ApiScenario app instance
 	setupTestApp := func(options *Options) func() (*tests.TestApp, error) {
@@ -149,6 +157,18 @@ func TestPlugin_MustRegister(t *testing.T) {
 			TestAppFactory: setupTestApp(&Options{
 				Enabled: true,
 				Url:     "http://localhost:1234",
+			}),
+		},
+		{
+			Name:            "/ request should be proxied when enabled and ProxyLogsEnabled",
+			Method:          http.MethodPost,
+			Url:             "/",
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`OK from /`},
+			TestAppFactory: setupTestApp(&Options{
+				Enabled:          true,
+				Url:              "http://localhost:1234",
+				ProxyLogsEnabled: true,
 			}),
 		},
 		{
@@ -191,6 +211,30 @@ func TestPlugin_MustRegister(t *testing.T) {
 				Enabled: true,
 				Url:     "http://localhost:1234",
 			}),
+		},
+		{
+			Name:            "/my-super-api-path request should not be proxied when enabled with custom skipper",
+			Method:          http.MethodPost,
+			Url:             "/my-super-api-path",
+			ExpectedStatus:  404,
+			ExpectedContent: []string{`"data":{}`},
+			TestAppFactory: func() (*tests.TestApp, error) {
+				testApp, err := tests.NewTestApp()
+				if err != nil {
+					return nil, err
+				}
+
+				p := MustRegister(testApp, &Options{
+					Enabled: true,
+					Url:     "http://localhost:1234",
+				})
+
+				p.SetSkipper(func(c echo.Context) bool {
+					return c.Request().URL.Path == "/my-super-api-path"
+				})
+
+				return testApp, nil
+			},
 		},
 	}
 
