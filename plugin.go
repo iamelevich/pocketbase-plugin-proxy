@@ -17,7 +17,9 @@ type Options struct {
 	// Enabled defines if proxy should be enabled.
 	Enabled bool
 
-	// Url to the target
+	//Url to the target.
+	//
+	//Only http and https links are supported.
 	Url string
 
 	// Are proxy logs enabled?
@@ -35,6 +37,7 @@ type Plugin struct {
 	parsedUrl *url.URL
 }
 
+// Validate plugin options. Return error if some option is invalid.
 func (p *Plugin) Validate() error {
 	if p.options == nil {
 		return fmt.Errorf("options is required")
