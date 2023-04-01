@@ -153,6 +153,18 @@ func TestPlugin_MustRegister(t *testing.T) {
 			}),
 		},
 		{
+			Name:            "/ request should be proxied when enabled and ProxyLogsEnabled",
+			Method:          http.MethodPost,
+			Url:             "/",
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`OK from /`},
+			TestAppFactory: setupTestApp(&Options{
+				Enabled:          true,
+				Url:              "http://localhost:1234",
+				ProxyLogsEnabled: true,
+			}),
+		},
+		{
 			Name:            "/ shouldn be proxied when options nil",
 			Method:          http.MethodPost,
 			Url:             "/",
