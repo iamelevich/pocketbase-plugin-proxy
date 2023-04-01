@@ -16,6 +16,11 @@
     * [func \(\*Plugin\) SetSkipper](#func-plugin-setskipper)
     * [func \(\*Plugin\) Validate](#func-plugin-validate)
 * [Contributing](#contributing)
+  * [Process](#process)
+  * [Development setup](#development-setup)
+  * [Testing](#testing)
+  * [Linting](#linting)
+  * [Docs update in README](#docs-update-in-readme)
 <!-- TOC -->
 
 # Overview
