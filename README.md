@@ -1,5 +1,6 @@
+[![Test](https://github.com/iamelevich/pocketbase-plugin-proxy/actions/workflows/test.yml/badge.svg)](https://github.com/iamelevich/pocketbase-plugin-proxy/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/iamelevich/pocketbase-plugin-proxy/branch/master/graph/badge.svg?token=MAXWWCGHWD)](https://codecov.io/gh/iamelevich/pocketbase-plugin-proxy)
 
-![Coverage](https://img.shields.io/badge/Coverage-28.2%25-red)
 <!-- TOC -->
   * [Overview](#overview)
     * [Requirements](#requirements)
@@ -32,7 +33,7 @@ package main
 
 import (
 	"log"
-	
+
 	proxyPlugin "github.com/iamelevich/pocketbase-plugin-proxy"
 	"github.com/pocketbase/pocketbase"
 )
