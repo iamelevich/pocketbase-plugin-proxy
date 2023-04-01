@@ -115,6 +115,13 @@ func TestPlugin_Validate(t *testing.T) {
 	}
 }
 
+func TestPlugin_Register(t *testing.T) {
+	_, err := Register(nil, nil)
+	if err == nil {
+		t.Errorf("Register() should fail when app is nil")
+	}
+}
+
 func TestPlugin_MustRegister(t *testing.T) {
 	// setup the test ApiScenario app instance
 	setupTestApp := func(options *Options) func() (*tests.TestApp, error) {
