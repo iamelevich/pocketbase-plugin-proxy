@@ -7,3 +7,6 @@ test:
 test-report:
 	go test ./... -v --cover -coverprofile=coverage.out
 	go tool cover -html=coverage.out
+
+run_base_example:
+	cd examples/base && go run main.go serve
