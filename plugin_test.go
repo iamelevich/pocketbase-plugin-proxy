@@ -60,7 +60,7 @@ func TestPlugin_Validate(t *testing.T) {
 				app: pocketbase.New(),
 				options: &Options{
 					Enabled: true,
-					Url:     "invalid url",
+					Url:     "!@#$%^&*()_+",
 				},
 			},
 			wantErr: true,
@@ -75,6 +75,28 @@ func TestPlugin_Validate(t *testing.T) {
 				},
 			},
 			wantErr: true,
+		},
+		{
+			name: "Enabled and valid options with http url",
+			fields: fields{
+				app: pocketbase.New(),
+				options: &Options{
+					Enabled: true,
+					Url:     "http://localhost:300",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "Enabled and valid options with https url",
+			fields: fields{
+				app: pocketbase.New(),
+				options: &Options{
+					Enabled: true,
+					Url:     "https://localhost:300",
+				},
+			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
