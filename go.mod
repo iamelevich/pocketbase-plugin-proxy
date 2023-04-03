@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/fatih/color v1.15.0
 	github.com/labstack/echo/v5 v5.0.0-20220201181537-ed2888cfa198
-	github.com/pocketbase/pocketbase v0.14.1
+	github.com/pocketbase/pocketbase v0.14.2
 )
 
 require (
