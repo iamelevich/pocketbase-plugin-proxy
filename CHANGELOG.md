@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.8](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.15.7...v0.15.8) (2024-08-07)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/fatih/color to v1.17.0 ([561fdbb](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/561fdbb310320dd8236d27a82dbcff54d544a789))
+
 ## [0.15.7](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.15.6...v0.15.7) (2023-07-18)
 
 
