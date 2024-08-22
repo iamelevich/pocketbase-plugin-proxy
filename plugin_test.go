@@ -124,16 +124,16 @@ func TestPlugin_Register(t *testing.T) {
 
 func TestPlugin_MustRegister(t *testing.T) {
 	// setup the test ApiScenario app instance
-	setupTestApp := func(options *Options) func() (*tests.TestApp, error) {
-		return func() (*tests.TestApp, error) {
+	setupTestApp := func(options *Options) func(t *testing.T) *tests.TestApp {
+		return func(t *testing.T) *tests.TestApp {
 			testApp, err := tests.NewTestApp()
 			if err != nil {
-				return nil, err
+				t.Fatal("Cannot initialize test app", err)
 			}
 
 			MustRegister(testApp, options)
 
-			return testApp, nil
+			return testApp
 		}
 	}
 
@@ -218,10 +218,10 @@ func TestPlugin_MustRegister(t *testing.T) {
 			Url:             "/my-super-api-path",
 			ExpectedStatus:  404,
 			ExpectedContent: []string{`"data":{}`},
-			TestAppFactory: func() (*tests.TestApp, error) {
+			TestAppFactory: func(t *testing.T) *tests.TestApp {
 				testApp, err := tests.NewTestApp()
 				if err != nil {
-					return nil, err
+					t.Fatal("Cannot initialize test app", err)
 				}
 
 				p := MustRegister(testApp, &Options{
@@ -233,7 +233,7 @@ func TestPlugin_MustRegister(t *testing.T) {
 					return c.Request().URL.Path == "/my-super-api-path"
 				})
 
-				return testApp, nil
+				return testApp
 			},
 		},
 	}
