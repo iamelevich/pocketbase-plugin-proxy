@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.16.0](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.15.7...v0.16.0) (2024-08-22)
+
+
+### Features
+
+* fix repo tests and other updates ([904da71](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/904da713a99dd988d3d0a97b26a9b709e369efa0))
+
+
+### Bug Fixes
+
+* **deps:** update github.com/labstack/echo/v5 digest to d20a625 ([5a135b5](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/5a135b511c39a75e7e4937e1194c4e1ff77b26de))
+* **deps:** update module github.com/fatih/color to v1.17.0 ([561fdbb](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/561fdbb310320dd8236d27a82dbcff54d544a789))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.22.18 ([e0e9d52](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/e0e9d526d3bfc72a924e8d7f1a9f6d1e8f34355c))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.22.19 ([1012bb5](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/1012bb50d341630236cbdf2c0d9627cb94dc7b4c))
+
 ## [0.15.7](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.15.6...v0.15.7) (2023-07-18)
 
 
