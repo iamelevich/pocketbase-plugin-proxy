@@ -1,5 +1,5 @@
 [![Test](https://github.com/iamelevich/pocketbase-plugin-proxy/actions/workflows/test.yml/badge.svg)](https://github.com/iamelevich/pocketbase-plugin-proxy/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/iamelevich/pocketbase-plugin-proxy/branch/master/graph/badge.svg?token=MAXWWCGHWD)](https://codecov.io/gh/iamelevich/pocketbase-plugin-proxy)
+[![codecov](https://codecov.io/github/iamelevich/pocketbase-plugin-proxy/graph/badge.svg?token=MAXWWCGHWD)](https://codecov.io/github/iamelevich/pocketbase-plugin-proxy)
 
 <!-- TOC -->
 * [Overview](#overview)
