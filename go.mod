@@ -5,7 +5,7 @@ go 1.23
 toolchain go1.23.2
 
 require (
-	github.com/fatih/color v1.17.0
+	github.com/fatih/color v1.18.0
 	github.com/labstack/echo/v5 v5.0.0-20230722203903-ec5b858dab61
 	github.com/pocketbase/pocketbase v0.22.21
 )
@@ -65,7 +65,7 @@ require (
 	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/oauth2 v0.22.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.24.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/term v0.23.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
