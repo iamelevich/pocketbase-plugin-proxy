@@ -2,7 +2,7 @@ module github.com/iamelevich/pocketbase-plugin-proxy
 
 go 1.23
 
-toolchain go1.25.0
+toolchain go1.25.1
 
 require (
 	github.com/fatih/color v1.18.0
