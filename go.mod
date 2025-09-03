@@ -6,7 +6,7 @@ toolchain go1.25.1
 
 require (
 	github.com/fatih/color v1.18.0
-	github.com/labstack/echo/v5 v5.0.0-20230722203903-ec5b858dab61
+	github.com/labstack/echo/v5 5ac2f11f21b7
 	github.com/pocketbase/pocketbase v0.22.27
 )
 
