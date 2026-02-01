@@ -2,9 +2,9 @@ package pocketbase_plugin_proxy
 
 import (
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
-	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tests"
@@ -124,8 +124,8 @@ func TestPlugin_Register(t *testing.T) {
 
 func TestPlugin_MustRegister(t *testing.T) {
 	// setup the test ApiScenario app instance
-	setupTestApp := func(options *Options) func(t *testing.T) *tests.TestApp {
-		return func(t *testing.T) *tests.TestApp {
+	setupTestApp := func(options *Options) func(t testing.TB) *tests.TestApp {
+		return func(t testing.TB) *tests.TestApp {
 			testApp, err := tests.NewTestApp()
 			if err != nil {
 				t.Fatal("Cannot initialize test app", err)
@@ -137,44 +137,42 @@ func TestPlugin_MustRegister(t *testing.T) {
 		}
 	}
 
-	proxyDestinationServer := &http.Server{
-		Addr: "localhost:1234",
-		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte("OK from " + r.URL.Path))
-		}),
-	}
-	defer proxyDestinationServer.Close()
-	go proxyDestinationServer.ListenAndServe()
+	proxyDestination := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("OK from " + r.URL.Path))
+	}))
+	defer proxyDestination.Close()
+
+	proxyURL := proxyDestination.URL
 
 	scenarios := []tests.ApiScenario{
 		{
 			Name:            "/ request should be proxied when enabled",
 			Method:          http.MethodPost,
-			Url:             "/",
+			URL:             "/",
 			ExpectedStatus:  200,
 			ExpectedContent: []string{`OK from /`},
 			TestAppFactory: setupTestApp(&Options{
 				Enabled: true,
-				Url:     "http://localhost:1234",
+				Url:     proxyURL,
 			}),
 		},
 		{
 			Name:            "/ request should be proxied when enabled and ProxyLogsEnabled",
 			Method:          http.MethodPost,
-			Url:             "/",
+			URL:             "/",
 			ExpectedStatus:  200,
 			ExpectedContent: []string{`OK from /`},
 			TestAppFactory: setupTestApp(&Options{
 				Enabled:          true,
-				Url:              "http://localhost:1234",
+				Url:              proxyURL,
 				ProxyLogsEnabled: true,
 			}),
 		},
 		{
 			Name:            "/ shouldn be proxied when options nil",
 			Method:          http.MethodPost,
-			Url:             "/",
+			URL:             "/",
 			ExpectedStatus:  404,
 			ExpectedContent: []string{`"data":{}`},
 			TestAppFactory:  setupTestApp(nil),
@@ -182,43 +180,43 @@ func TestPlugin_MustRegister(t *testing.T) {
 		{
 			Name:            "/ shouldn be proxied when disabled",
 			Method:          http.MethodPost,
-			Url:             "/",
+			URL:             "/",
 			ExpectedStatus:  404,
 			ExpectedContent: []string{`"data":{}`},
 			TestAppFactory: setupTestApp(&Options{
 				Enabled: false,
-				Url:     "http://localhost:1234",
+				Url:     proxyURL,
 			}),
 		},
 		{
 			Name:            "/api/test request should not be proxied when enabled",
 			Method:          http.MethodPost,
-			Url:             "/api/test",
+			URL:             "/api/test",
 			ExpectedStatus:  404,
 			ExpectedContent: []string{`"data":{}`},
 			TestAppFactory: setupTestApp(&Options{
 				Enabled: true,
-				Url:     "http://localhost:1234",
+				Url:     proxyURL,
 			}),
 		},
 		{
 			Name:            "/_/test request should not be proxied when enabled",
 			Method:          http.MethodPost,
-			Url:             "/_/test",
-			ExpectedStatus:  405,
+			URL:             "/_/test",
+			ExpectedStatus:  404,
 			ExpectedContent: []string{`"data":{}`},
 			TestAppFactory: setupTestApp(&Options{
 				Enabled: true,
-				Url:     "http://localhost:1234",
+				Url:     proxyURL,
 			}),
 		},
 		{
 			Name:            "/my-super-api-path request should not be proxied when enabled with custom skipper",
 			Method:          http.MethodPost,
-			Url:             "/my-super-api-path",
+			URL:             "/my-super-api-path",
 			ExpectedStatus:  404,
 			ExpectedContent: []string{`"data":{}`},
-			TestAppFactory: func(t *testing.T) *tests.TestApp {
+			TestAppFactory: func(t testing.TB) *tests.TestApp {
 				testApp, err := tests.NewTestApp()
 				if err != nil {
 					t.Fatal("Cannot initialize test app", err)
@@ -226,11 +224,11 @@ func TestPlugin_MustRegister(t *testing.T) {
 
 				p := MustRegister(testApp, &Options{
 					Enabled: true,
-					Url:     "http://localhost:1234",
+					Url:     proxyURL,
 				})
 
-				p.SetSkipper(func(c echo.Context) bool {
-					return c.Request().URL.Path == "/my-super-api-path"
+				p.SetSkipper(func(c *core.RequestEvent) bool {
+					return c.Request.URL.Path == "/my-super-api-path"
 				})
 
 				return testApp

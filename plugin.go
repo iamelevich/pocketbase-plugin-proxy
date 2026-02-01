@@ -2,19 +2,21 @@ package pocketbase_plugin_proxy
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"net/url"
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/labstack/echo/v5"
-	"github.com/labstack/echo/v5/middleware"
 	"github.com/pocketbase/pocketbase/core"
 )
 
+type Skipper func(c *core.RequestEvent) bool
+
 // DefaultSkipper skip proxy middleware for requests, where path starts with /_/ or /api/.
-func DefaultSkipper(c echo.Context) bool {
-	return strings.HasPrefix(c.Request().URL.Path, "/_/") || strings.HasPrefix(c.Request().URL.Path, "/api/")
+func DefaultSkipper(c *core.RequestEvent) bool {
+	return strings.HasPrefix(c.Request.URL.Path, "/_/") || strings.HasPrefix(c.Request.URL.Path, "/api/")
 }
 
 // Options defines optional struct to customize the default plugin behavior.
@@ -42,7 +44,7 @@ type Plugin struct {
 	parsedUrl *url.URL
 
 	// Skipper function for proxy middleware
-	skipper middleware.Skipper
+	skipper Skipper
 }
 
 // Validate plugin options. Return error if some option is invalid.
@@ -88,37 +90,73 @@ Example:
 		Enabled: true,
 		Url:     "http://localhost:3000",
 	})
-	plugin.SetSkipper(func(c echo.Context) bool {
-		return c.Request().URL.Path == "/my-super-secret-route"
+	plugin.SetSkipper(func(c *core.RequestEvent) bool {
+		return c.Request.URL.Path == "/my-super-secret-route"
 	})
 */
-func (p *Plugin) SetSkipper(skipper middleware.Skipper) {
+func (p *Plugin) SetSkipper(skipper Skipper) {
 	p.skipper = skipper
 }
 
-func (p *Plugin) enableProxy(e *core.ServeEvent) {
+// singleJoiningSlash joins base path and path, normalizing slashes.
+func singleJoiningSlash(base, path string) string {
+	baseSlash := strings.HasSuffix(base, "/")
+	pathSlash := strings.HasPrefix(path, "/")
+	switch {
+	case baseSlash && pathSlash:
+		return base + path[1:]
+	case !baseSlash && !pathSlash:
+		return base + "/" + path
+	}
+	return base + path
+}
+
+func (p *Plugin) enableProxy(se *core.ServeEvent) {
 	if p.options.Enabled {
-		if p.options.ProxyLogsEnabled {
-			e.Router.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-				Skipper: p.skipper,
-			}))
-		} else {
-			log.Println("Proxy logs are disabled")
-		}
-		e.Router.Use(middleware.ProxyWithConfig(middleware.ProxyConfig{
-			Skipper: p.skipper,
-			Balancer: middleware.NewRoundRobinBalancer([]*middleware.ProxyTarget{
-				{
-					URL: p.parsedUrl,
-				},
-			}),
-		}))
+		se.Router.BindFunc(func(e *core.RequestEvent) error {
+			if p.skipper(e) {
+				return e.Next()
+			}
+			if p.options.ProxyLogsEnabled {
+				log.Println("Proxying request from ", e.Request.URL.String(), " to ", p.parsedUrl.String()+e.Request.URL.Path)
+			}
+			// Build backend URL: base + path (and raw query if any)
+			backendURL := *p.parsedUrl
+			backendURL.Path = singleJoiningSlash(backendURL.Path, e.Request.URL.Path)
+			backendURL.RawQuery = e.Request.URL.RawQuery
+			req, err := http.NewRequestWithContext(e.Request.Context(), e.Request.Method, backendURL.String(), e.Request.Body)
+			if err != nil {
+				return err
+			}
+			req.Header = e.Request.Header.Clone()
+			client := &http.Client{}
+			resp, err := client.Do(req)
+			if err != nil {
+				return err
+			}
+			defer func() {
+				_ = resp.Body.Close()
+			}()
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return err
+			}
+			// Copy status and headers from backend response
+			for k, v := range resp.Header {
+				for _, vv := range v {
+					e.Response.Header().Add(k, vv)
+				}
+			}
+			e.Response.WriteHeader(resp.StatusCode)
+			_, _ = e.Response.Write(body)
+			return nil
+		})
 
 		date := new(strings.Builder)
 		log.New(date, "", log.LstdFlags).Print()
 
 		bold := color.New(color.Bold).Add(color.FgGreen)
-		bold.Printf(
+		_, _ = bold.Printf(
 			"%s Proxy will forward requests to %s\n",
 			strings.TrimSpace(date.String()),
 			color.CyanString("%s", p.parsedUrl.String()),
@@ -154,9 +192,9 @@ func Register(app core.App, options *Options) (*Plugin, error) {
 		return p, err
 	}
 
-	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		p.enableProxy(e)
-		return nil
+	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		p.enableProxy(se)
+		return se.Next()
 	})
 
 	return p, nil
