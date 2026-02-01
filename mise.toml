@@ -2,7 +2,7 @@
 go = "1"
 golangci-lint = "latest"
 prek = "latest"
-python = "3.12"
+python = "3.14.2"
 
 [tasks.lint]
 description = "Run golangci-lint"
