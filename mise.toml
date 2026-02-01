@@ -1,0 +1,46 @@
+[tools]
+go = "1"
+golangci-lint = "latest"
+prek = "latest"
+python = "3.12"
+
+[tasks.lint]
+description = "Run golangci-lint"
+run = """
+golangci-lint run ./...
+"""
+
+[tasks.lint-staged]
+description = "Run golangci-lint on staged changes"
+run = """
+git diff --cached > /tmp/stage.patch
+golangci-lint run --new-from-patch=/tmp/stage.patch
+rm /tmp/stage.patch
+"""
+
+[tasks.test]
+description = "Run tests"
+run = """
+go test -v `go list ./... | grep -v -e './examples' -e './test'` --cover
+"""
+
+[tasks.test-report]
+description = "Run tests and generate coverage report"
+run = """
+go test -v `go list ./... | grep -v -e './examples' -e './test'` --coverprofile=coverage.out
+go tool cover -html=coverage.out -o coverage.html
+"""
+
+[tasks.run-example-base]
+description = "Run example base"
+dir = "examples/base"
+run = """
+go run main.go serve
+"""
+
+[tasks.docs]
+description = "Generate docs"
+run = """
+go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@latest
+gomarkdoc -o README.md -e .
+"""
