@@ -7,13 +7,13 @@ repos:
         language: system
         types: [go]
         pass_filenames: false
-# -   repo: builtin
-#     rev: latest
-#     hooks:
-#     -   id: trailing-whitespace
-#     -   id: check-yaml
-#     -   id: check-toml
-#     -   id: check-added-large-files
+-   repo: builtin
+    rev: latest
+    hooks:
+    -   id: trailing-whitespace
+    -   id: check-yaml
+    -   id: check-toml
+    -   id: check-added-large-files
 # -   repo: https://github.com/tekwizely/pre-commit-golang
 #     rev: v1.0.0-rc.4
 #     hooks:
