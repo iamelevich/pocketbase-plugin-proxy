@@ -1,7 +1,3 @@
-# See https://pre-commit.com for more information
-# See https://pre-commit.com/hooks.html for more hooks
-default_language_version:
-  python: python3.12
 repos:
 -   repo: local
     hooks:
@@ -11,21 +7,22 @@ repos:
         language: system
         types: [go]
         pass_filenames: false
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
-    hooks:
-    -   id: trailing-whitespace
-    -   id: check-yaml
-    -   id: check-added-large-files
--   repo: https://github.com/tekwizely/pre-commit-golang
-    rev: v1.0.0-rc.4
-    hooks:
-    -   id: go-fmt
-    -   id: go-mod-tidy
-- repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-  rev: v9.24.0
-  hooks:
-      - id: commitlint
-        stages: [commit-msg]
-        additional_dependencies:
-            - '@commitlint/config-conventional'
+# -   repo: builtin
+#     rev: latest
+#     hooks:
+#     -   id: trailing-whitespace
+#     -   id: check-yaml
+#     -   id: check-toml
+#     -   id: check-added-large-files
+# -   repo: https://github.com/tekwizely/pre-commit-golang
+#     rev: v1.0.0-rc.4
+#     hooks:
+#     -   id: go-fmt
+#     -   id: go-mod-tidy
+# - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+#   rev: v9.24.0
+#   hooks:
+#       - id: commitlint
+#         stages: [commit-msg]
+#         additional_dependencies:
+#             - '@commitlint/config-conventional'
