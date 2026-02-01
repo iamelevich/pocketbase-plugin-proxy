@@ -1,8 +1,11 @@
 package pocketbase_plugin_proxy
 
 import (
+	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/pocketbase/pocketbase"
@@ -239,4 +242,138 @@ func TestPlugin_MustRegister(t *testing.T) {
 	for _, scenario := range scenarios {
 		scenario.Test(t)
 	}
+}
+
+// receivedRequest captures what the proxy destination server receives.
+type receivedRequest struct {
+	Method  string            `json:"method"`
+	Path    string            `json:"path"`
+	Query   string            `json:"query"`
+	Headers map[string]string `json:"headers"`
+	Body    string            `json:"body"`
+}
+
+func TestPlugin_ProxifiesRequests(t *testing.T) {
+	// Proxy destination that echoes received request data as JSON
+	proxyDestination := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, _ := io.ReadAll(r.Body)
+		_ = r.Body.Close()
+
+		headers := make(map[string]string)
+		for k, v := range r.Header {
+			if len(v) > 0 {
+				headers[k] = v[0]
+			}
+		}
+
+		received := receivedRequest{
+			Method:  r.Method,
+			Path:    r.URL.Path,
+			Query:   r.URL.RawQuery,
+			Headers: headers,
+			Body:    string(body),
+		}
+		jsonBytes, _ := json.Marshal(received)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write(jsonBytes)
+	}))
+	defer proxyDestination.Close()
+
+	setupTestApp := func(options *Options) func(t testing.TB) *tests.TestApp {
+		return func(t testing.TB) *tests.TestApp {
+			testApp, err := tests.NewTestApp()
+			if err != nil {
+				t.Fatal("Cannot initialize test app", err)
+			}
+			MustRegister(testApp, options)
+			return testApp
+		}
+	}
+
+	t.Run("forwards HTTP method", func(t *testing.T) {
+		for _, method := range []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodPatch} {
+			method := method
+			t.Run(method, func(t *testing.T) {
+				scenario := tests.ApiScenario{
+					Name:            method + " request",
+					Method:          method,
+					URL:             "/",
+					ExpectedStatus:  200,
+					ExpectedContent: []string{`"method":"` + method + `"`},
+					TestAppFactory:  setupTestApp(&Options{Enabled: true, Url: proxyDestination.URL}),
+				}
+				scenario.Test(t)
+			})
+		}
+	})
+
+	t.Run("forwards request path", func(t *testing.T) {
+		scenarios := []struct {
+			path string
+		}{
+			{"/"},
+			{"/some/path"},
+			{"/nested/deep/path"},
+			{"/trailing/slash/"},
+		}
+		for _, tc := range scenarios {
+			tc := tc
+			t.Run("path"+tc.path, func(t *testing.T) {
+				scenario := tests.ApiScenario{
+					Name:            "path " + tc.path,
+					Method:          http.MethodGet,
+					URL:             tc.path,
+					ExpectedStatus:  200,
+					ExpectedContent: []string{`"path":"` + tc.path + `"`},
+					TestAppFactory:  setupTestApp(&Options{Enabled: true, Url: proxyDestination.URL}),
+				}
+				scenario.Test(t)
+			})
+		}
+	})
+
+	t.Run("forwards query parameters", func(t *testing.T) {
+		scenario := tests.ApiScenario{
+			Name:   "query params",
+			Method: http.MethodGet,
+			URL:    "/search?q=hello&page=2&filter=active",
+			// JSON escapes & as \u0026, so we verify each param is present
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`q=hello`, `page=2`, `filter=active`},
+			TestAppFactory:  setupTestApp(&Options{Enabled: true, Url: proxyDestination.URL}),
+		}
+		scenario.Test(t)
+	})
+
+	t.Run("forwards request headers", func(t *testing.T) {
+		scenario := tests.ApiScenario{
+			Name:   "custom headers",
+			Method: http.MethodGet,
+			URL:    "/",
+			Headers: map[string]string{
+				"X-Custom-Header": "custom-value",
+				"X-Request-Id":    "test-123",
+				"Accept":          "application/json",
+			},
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`"X-Custom-Header":"custom-value"`, `"X-Request-Id":"test-123"`, `"Accept":"application/json"`},
+			TestAppFactory:  setupTestApp(&Options{Enabled: true, Url: proxyDestination.URL}),
+		}
+		scenario.Test(t)
+	})
+
+	t.Run("forwards request body", func(t *testing.T) {
+		body := `{"payload":"proxified-body-xyz789"}`
+		scenario := tests.ApiScenario{
+			Name:            "request body",
+			Method:          http.MethodPost,
+			URL:             "/",
+			Body:            strings.NewReader(body),
+			Headers:         map[string]string{"Content-Type": "application/json"},
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`proxified-body-xyz789`},
+			TestAppFactory:  setupTestApp(&Options{Enabled: true, Url: proxyDestination.URL}),
+		}
+		scenario.Test(t)
+	})
 }
