@@ -376,4 +376,124 @@ func TestPlugin_ProxifiesRequests(t *testing.T) {
 		}
 		scenario.Test(t)
 	})
+
+	t.Run("adds extra headers from options", func(t *testing.T) {
+		scenario := tests.ApiScenario{
+			Name:            "extra headers from options",
+			Method:          http.MethodGet,
+			URL:             "/",
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`"X-Proxy-Header":"proxy-value"`, `"X-Api-Key":"secret-key"`},
+			TestAppFactory: setupTestApp(&Options{
+				Enabled: true,
+				Url:     proxyDestination.URL,
+				Headers: map[string]string{
+					"X-Proxy-Header": "proxy-value",
+					"X-Api-Key":      "secret-key",
+				},
+			}),
+		}
+		scenario.Test(t)
+	})
+
+	t.Run("extra headers override incoming headers with same name", func(t *testing.T) {
+		scenario := tests.ApiScenario{
+			Name:   "extra headers override",
+			Method: http.MethodGet,
+			URL:    "/",
+			Headers: map[string]string{
+				"X-Overridable": "incoming-value",
+			},
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`"X-Overridable":"extra-value"`},
+			TestAppFactory: setupTestApp(&Options{
+				Enabled: true,
+				Url:     proxyDestination.URL,
+				Headers: map[string]string{
+					"X-Overridable": "extra-value",
+				},
+			}),
+		}
+		scenario.Test(t)
+	})
+}
+
+func TestPlugin_ProxifiesResponse(t *testing.T) {
+	backendRespBody := "backend response body"
+	backendRespStatus := http.StatusCreated
+	proxyDestination := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Backend-Header", "backend-value")
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(backendRespStatus)
+		_, _ = w.Write([]byte(backendRespBody))
+	}))
+	defer proxyDestination.Close()
+
+	testApp, err := tests.NewTestApp()
+	if err != nil {
+		t.Fatal("Cannot initialize test app", err)
+	}
+	MustRegister(testApp, &Options{Enabled: true, Url: proxyDestination.URL})
+
+	scenario := tests.ApiScenario{
+		Name:            "forwards backend response status and headers",
+		Method:          http.MethodGet,
+		URL:             "/",
+		ExpectedStatus:  backendRespStatus,
+		ExpectedContent: []string{backendRespBody},
+		TestAppFactory:  func(t testing.TB) *tests.TestApp { return testApp },
+		AfterTestFunc: func(t testing.TB, app *tests.TestApp, res *http.Response) {
+			if got := res.Header.Get("X-Backend-Header"); got != "backend-value" {
+				t.Errorf("expected X-Backend-Header=backend-value, got %q", got)
+			}
+		},
+	}
+	scenario.Test(t)
+}
+
+func Test_singleJoiningSlash(t *testing.T) {
+	tests := []struct {
+		name string
+		base string
+		path string
+		want string
+	}{
+		{"both slash", "/base/", "/path", "/base/path"},
+		{"base slash only", "/base/", "path", "/base/path"},
+		{"path slash only", "/base", "/path", "/base/path"},
+		{"no slash", "/base", "path", "/base/path"},
+		{"root base", "", "/", "/"},
+		{"root path", "/", "", "/"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := singleJoiningSlash(tt.base, tt.path); got != tt.want {
+				t.Errorf("singleJoiningSlash(%q, %q) = %q, want %q", tt.base, tt.path, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDefaultSkipper(t *testing.T) {
+	tests := []struct {
+		path string
+		want bool
+	}{
+		{"/_/something", true},
+		{"/api/users", true},
+		{"/api/test", true},
+		{"/", false},
+		{"/other", false},
+		{"/_no-leading-slash", false},
+		{"/api-no-slash", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.path, func(t *testing.T) {
+			e := &core.RequestEvent{}
+			e.Request = httptest.NewRequest(http.MethodGet, "http://test"+tt.path, nil)
+			if got := DefaultSkipper(e); got != tt.want {
+				t.Errorf("DefaultSkipper(%q) = %v, want %v", tt.path, got, tt.want)
+			}
+		})
+	}
 }
