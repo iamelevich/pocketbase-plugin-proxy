@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.17.2...v0.18.0) (2026-02-22)
+
+
+### Features
+
+* add support for custom headers in proxy requests and enhance tests for header handling ([2e18a8f](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/2e18a8fc83780bc2548c6579096565f6075875e2))
+
 ## [0.17.2](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.17.1...v0.17.2) (2026-02-21)
 
 
