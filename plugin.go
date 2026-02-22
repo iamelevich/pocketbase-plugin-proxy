@@ -31,6 +31,9 @@ type Options struct {
 
 	// Are proxy logs enabled?
 	ProxyLogsEnabled bool
+
+	// Headers to add to the request.
+	Headers map[string]string
 }
 
 type Plugin struct {
@@ -129,6 +132,11 @@ func (p *Plugin) enableProxy(se *core.ServeEvent) {
 				return err
 			}
 			req.Header = e.Request.Header.Clone()
+			if p.options.Headers != nil {
+				for k, v := range p.options.Headers {
+					req.Header.Set(k, v)
+				}
+			}
 			client := &http.Client{}
 			resp, err := client.Do(req)
 			if err != nil {
