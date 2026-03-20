@@ -3,7 +3,7 @@ module github.com/iamelevich/pocketbase-plugin-proxy
 go 1.26.0
 
 require (
-	github.com/fatih/color v1.18.0
+	github.com/fatih/color v1.19.0
 	github.com/pocketbase/pocketbase v0.36.7
 )
 
