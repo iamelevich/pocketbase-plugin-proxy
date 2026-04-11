@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.18.5](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.18.4...v0.18.5) (2026-04-09)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/pocketbase/pocketbase to v0.36.9 ([4549a33](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/4549a33bacab65d585eb1d639441285acb7e5012))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.36.9 ([7439368](https://github.com/iamelevich/pocketbase-plugin-proxy/commit/743936847aed9d34b186b1dc6dfd70238a5db45a))
+
 ## [0.18.4](https://github.com/iamelevich/pocketbase-plugin-proxy/compare/v0.18.3...v0.18.4) (2026-03-28)
 
 
