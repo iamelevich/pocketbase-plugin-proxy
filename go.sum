@@ -61,6 +61,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pocketbase/dbx v1.12.0 h1:/oLErM+A0b4xI0PWTGPqSDVjzix48PqI/bng2l0PzoA=
 github.com/pocketbase/dbx v1.12.0/go.mod h1:xXRCIAKTHMgUCyCKZm55pUOdvFziJjQfXaWKhu2vhMs=
+github.com/pocketbase/ozzo-validation/v4 v4.3.0 h1:uKBDVma7bZqgR2a6AwE+k9hkuDFfiZMpBHQdZ1z3iQs=
+github.com/pocketbase/ozzo-validation/v4 v4.3.0/go.mod h1:6XNjSTw/Jb2F8LOkKO3oyzIWExbrGiYoS4uVxVwz90g=
 github.com/pocketbase/pocketbase v0.36.5 h1:QQhfBtOvKN4VXTwh8is5TLxMOKhPXaUcM/RKAlZ31n0=
 github.com/pocketbase/pocketbase v0.36.5/go.mod h1:m3tkFYh/+m6yiWHv5ED8gJczVefkbTzrlZOtsNa+bA4=
 github.com/pocketbase/pocketbase v0.36.6 h1:SYb6cUTZKV8RX3G2WpNM6qKIvUjEY8uTWYNtO/Sbnq8=
@@ -103,6 +105,8 @@ github.com/pocketbase/pocketbase v0.39.5 h1:tAqVi6/SfSXw4DwJZ6S6zaYlfdMDZG2t3sNc
 github.com/pocketbase/pocketbase v0.39.5/go.mod h1:o/iskDiVCrYFC04uTBpMrwgZm07UCIOkuw1QP/oXOp0=
 github.com/pocketbase/pocketbase v0.39.6 h1:tLuhjRxslN352BN09lPXgKciBRl8pxBORT8fsVI0n0c=
 github.com/pocketbase/pocketbase v0.39.6/go.mod h1:cB0R4LQvKJfQmSIczFPj65TtWg/IxT+gy0b1BqNYzpI=
+github.com/pocketbase/pocketbase v0.39.7 h1:XcoKHEcYwJMHtbVeFGcbFXkjfdvW/Khn7eLy/WzKPww=
+github.com/pocketbase/pocketbase v0.39.7/go.mod h1:1RMpjWM3RtDvu8Xf3azvjxaRtFCAZELzW/aRFGwLu6M=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
 github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
