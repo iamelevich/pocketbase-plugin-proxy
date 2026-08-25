@@ -4,7 +4,7 @@ go 1.27
 
 require (
 	github.com/fatih/color v1.19.0
-	github.com/pocketbase/pocketbase v0.40.0
+	github.com/pocketbase/pocketbase v0.40.1
 )
 
 require (
