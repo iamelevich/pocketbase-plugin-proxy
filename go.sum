@@ -129,6 +129,8 @@ github.com/pocketbase/pocketbase v0.39.11 h1:cl/Kh13ukof/4BAEku3OozYrLl85M5/bmH6
 github.com/pocketbase/pocketbase v0.39.11/go.mod h1:5CaCvp/52fZJ5/qyYsqpCGyVue/kjez889cQAATD2cY=
 github.com/pocketbase/pocketbase v0.40.0 h1:pAnB1gXOhsf/jMAbO2DTjLdPf8qOpVYlM6ENghZwD6s=
 github.com/pocketbase/pocketbase v0.40.0/go.mod h1:++Krwfbk+s2qtFerpHlWVEl8FO7J7rRQ6/MMtS9LGOo=
+github.com/pocketbase/pocketbase v0.40.1 h1:JS+Kr75bY67IPKhKgcIypn2kKc0Zd4yDGAZ4nkhuQEc=
+github.com/pocketbase/pocketbase v0.40.1/go.mod h1:++Krwfbk+s2qtFerpHlWVEl8FO7J7rRQ6/MMtS9LGOo=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
 github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
