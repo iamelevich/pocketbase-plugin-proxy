@@ -133,6 +133,8 @@ github.com/pocketbase/pocketbase v0.40.1 h1:JS+Kr75bY67IPKhKgcIypn2kKc0Zd4yDGAZ4
 github.com/pocketbase/pocketbase v0.40.1/go.mod h1:++Krwfbk+s2qtFerpHlWVEl8FO7J7rRQ6/MMtS9LGOo=
 github.com/pocketbase/pocketbase v0.40.2 h1:7gTqvt3bmilkphyZZ1QNhX19g3BXHqT7ynDyU81RVT4=
 github.com/pocketbase/pocketbase v0.40.2/go.mod h1:jc3YuyToy+ZXM4CeO7uSCN/htgR8yv+tjSE3eJZ8eh8=
+github.com/pocketbase/pocketbase v0.40.3 h1:iLq2DPQjcBRDJ2sjM5ssc7eLV7LmPtCKx4Xs8Rkgud8=
+github.com/pocketbase/pocketbase v0.40.3/go.mod h1:T5rHKBqPqzEOesla8gqBnwqnceXfeHVuGt/MekG00TU=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
 github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
@@ -167,6 +169,8 @@ golang.org/x/crypto v0.54.0 h1:YLIA59K4fiNzHzjnZt2tUJQjQtUWfWbeHBqKtk3eScw=
 golang.org/x/crypto v0.54.0/go.mod h1:KWL8ny2AZdGR2cWmzeHrp2azQPGogOv+HeQaVEXC2dk=
 golang.org/x/crypto v0.55.0 h1:+KWHjbgOaAQ66dh/YlkZKHlz9ZUlq61AFirAR9ntP8M=
 golang.org/x/crypto v0.55.0/go.mod h1:uq0V9dE/fzQuJtbnL+2EhWOE63vo164FY8xqEnV9xis=
+golang.org/x/crypto v0.56.0 h1:GUh5Ii4J5jtcseSMiRqr1jXCNHoxjeV9Fmekc2oLy6Y=
+golang.org/x/crypto v0.56.0/go.mod h1:OMW5y6CY9l38uPLmxU6l6pwcXp1obtLo3e6gT7gQR2I=
 golang.org/x/exp v0.0.0-20260112195511-716be5621a96 h1:Z/6YuSHTLOHfNFdb8zVZomZr7cqNgTJvA8+Qz75D8gU=
 golang.org/x/exp v0.0.0-20260112195511-716be5621a96/go.mod h1:nzimsREAkjBCIEFtHiYkrJyT+2uy9YZJB7H1k68CXZU=
 golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
